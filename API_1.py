@@ -14,6 +14,6 @@ import MyModule_p7
 #-------------------------Filter warnings-------------------------
 import warnings
 warnings.filterwarnings('ignore')
-! pip install category_encoders --quiet
-! pip install shap --quiet
-! pip install Flask
+pip install category_encoders --quiet
+pip install shap --quiet
+pip install Flask
