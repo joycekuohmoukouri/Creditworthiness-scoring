@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
+import joblib
 
 def application(chemin, selected_features):
   df = pd.read_csv(chemin,
@@ -390,3 +391,31 @@ def nettoyage(df):
   df['ANCIENNETE_EMPLOI'].replace(-1015, 0, inplace=True)
   df['GENRE'].replace('XNA', 'F', inplace = True)
   return df
+
+###----------------------------- Fonctions pour l'API---------------------------------------
+# Fonction permettant de charger le preprocessing
+def preprocess_model():
+  df_train_org = pd.read_csv('df_train_set_1.csv',
+                 usecols=['SECTEUR_ACTIVITE'])
+  freq_by_org_type = df_train_org['SECTEUR_ACTIVITE'].value_counts(normalize=True).to_dict()
+# Define the function for Frequency Encoding
+  def frequency_encode(x):
+    return x.replace(freq_by_org_type)
+  with open('preprocessing_2.pkl', 'rb') as f:
+    loaded_preprocess = joblib.load(f)
+  return loaded_preprocess
+
+# Fonction pour obtenir les données clients
+def get_client_data(client_id):
+    selected_features = ['PROPRIETAIRE', 'NBRE_ENFANT',
+       'ANCIENNETE_CREDIT', 'CHARGES_ANNUEL', 'REVENUS_TOT', 'MONTANT_CREDIT',
+       'OCCUPATION', 'CC_RATIO_CREDIT', 'NIVEAU_ETUDE', 'AGE',
+       'ANCIENNETE_EMPLOI', 'SCORE_REGION', 'HEURE_APP', 'SECTEUR_ACTIVITE',
+       'SCORE_2_EXT', 'RATIO_ENDETT(%)', 'NBRE_CONTRAT_ACTIFS',
+       'NBRE_J_RETARD', 'POS_PROGRESS_MAX_MIN', 'CC_NOMBRE_RETRAIT_MOYEN',
+       'CB_SOMME_DUES_RETARD']
+    df = pd.read_csv('client_db.csv',dtype={'SK_ID_CURR' : 'object'}, usecols= selected_features)
+    client_data = df[df['client_id'] == client_id]
+    return client_data
+
+
