@@ -14,9 +14,8 @@ import json
 app = Flask(__name__, static_url_path='/static')
 app.config["DEBUG"] = True
 
-api_root = 'https://connect-dublin.heroku.com/api/v3'
 
-@app.route(api_root)
+@app.route('/')
 def welcome():
     return render_template('index.html')
 
@@ -25,7 +24,7 @@ def welcome():
 def Dashboard():
     # Receive client ID from the form submission
     client_id = request.form.get('client_id')
-    api_url = api_root+'predict/'
+    api_url = '/predict/'
 
     try:
         response = requests.post(api_url, json={'client_id': client_id})

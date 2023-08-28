@@ -1,2 +1,3 @@
-api1: python API_1_DEPLOY.py
-api2: python API_2_DEPLOY.py
+web: gunicorn API_1:app
+api2: python API_2.py
+streamlit: streamlit run streamlit_app.py
