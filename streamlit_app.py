@@ -26,7 +26,7 @@ cols = [#'GENRE',
                      #'RATIO_ENDETT(%)',
                      'NBRE_CONTRAT_ACTIFS','NBRE_J_RETARD', 'POS_PROGRESS_MAX_MIN',
                      'CC_NOMBRE_RETRAIT_MOYEN', 'CB_SOMME_DUES_RETARD']
-df = pd.read_csv('client_db.csv', usecols = cols)
+df = pd.read_csv('client_test_db.csv', usecols = cols)
 print(df.head())
 # Chgt du pre-processing + modèle
 df_train_org = pd.read_csv('./df_train_set_1.csv',

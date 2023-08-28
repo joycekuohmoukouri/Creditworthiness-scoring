@@ -9,6 +9,7 @@ from flask import Flask, request, jsonify
 ### les fonctions 
 df_train_org = pd.read_csv('./df_train_set_1.csv',
                  usecols=['SECTEUR_ACTIVITE'])
+print(df_train_org.head())
 
 freq_by_org_type = df_train_org['SECTEUR_ACTIVITE'].value_counts(normalize=True).to_dict()
 
@@ -66,5 +67,5 @@ def prediction_credit():
     }
  
 if __name__ == '__main__':
-    app_prediction.run(host='0.0.0.0', port=5000)
+    app_prediction.run(host='0.0.0.0', port=7000)
 

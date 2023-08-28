@@ -12,6 +12,7 @@ import json
 ## Création de l'API
 
 app = Flask(__name__, static_url_path='/static')
+app.config["DEBUG"] = True
 
 @app.route('/')
 def welcome():
@@ -22,7 +23,7 @@ def welcome():
 def Dashboard():
     # Receive client ID from the form submission
     client_id = request.form.get('client_id')
-    api_url = 'http://127.0.0.1:5000/predict/'
+    api_url = 'http://127.0.0.1:7000/predict/'
 
     try:
         response = requests.post(api_url, json={'client_id': client_id})
@@ -38,6 +39,6 @@ def Dashboard():
         return str(e)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=7001)
 
 

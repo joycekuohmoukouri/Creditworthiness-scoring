@@ -427,7 +427,7 @@ def get_client_data(client_id):
                      #'RATIO_ENDETT(%)',
                      'NBRE_CONTRAT_ACTIFS','NBRE_J_RETARD', 'POS_PROGRESS_MAX_MIN',
                      'CC_NOMBRE_RETRAIT_MOYEN', 'CB_SOMME_DUES_RETARD']
-    df = pd.read_csv('client_db.csv',dtype={'SK_ID_CURR' : 'object'})
+    df = pd.read_csv('client_test_db.csv',dtype={'SK_ID_CURR' : 'object'})
     client_data = df[df['SK_ID_CURR'] == client_id]
     client_data = client_data[selected_features]
     return client_data
