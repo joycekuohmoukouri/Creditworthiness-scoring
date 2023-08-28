@@ -1,40 +1,43 @@
 import pandas as pd
 import numpy as np
-import joblib
 import requests
-import MyModule_p7
-from lightgbm import LGBMClassifier
-import sklearn
-
-from flask import Flask, request, jsonify
-df_train_org = pd.read_csv('df_train_set_1.csv',
-                 usecols=['SECTEUR_ACTIVITE'])
-freq_by_org_type = df_train_org['SECTEUR_ACTIVITE'].value_counts(normalize=True).to_dict()
-def frequency_encode(x):
-    return x.replace(freq_by_org_type)
-## CHARGEMENT DU PREPROCESING--------------------------------------------------------------
-loaded_preprocess = MyModule_p7.preprocess_model()
-
-# CHARGEMENT DE MON MODÈLE DE CLASSIFICATION 
-classification_model = joblib.load('LightGBM_bestmodel.pkl')
+import streamlit as st
+import plotly.graph_objs as go
+import plotly.express as px
+from flask import Flask, request, jsonify,  send_file, render_template
+import subprocess
+import os
+import json
 
 ## Création de l'API
 
-#app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
-#@app.route('/predict', methods=['POST'])
-def prediction_credit():
-    client_id = input("Entrer id_clients")
-    #data = request.get_json()
-    #client_id = data.get('client_id')
-    ######------- Importation des données clients 
-    client_data = MyModule_p7.get_client_data(client_id)
-    df_client_pp = loaded_preprocess.transform(client_data)
-    prediction = classification_model.predict(df_client_pp)
-    #response_from_other_api = communicate_with_other_api(prediction)
+@app.route('/')
+def welcome():
+    return render_template('index.html')
 
-    return {'prediction': prediction}
+# Define a route for the welcome page
+@app.route('/Dashboard/',methods=['POST', 'GET'])
+def Dashboard():
+    # Receive client ID from the form submission
+    client_id = request.form.get('client_id')
+    api_url = 'http://127.0.0.1:5000/predict/'
 
-prediction_credit()
+    try:
+        response = requests.post(api_url, json={'client_id': client_id})
+        if response.status_code == 200:
+            data = response.json()
+            with open('shared_score.json', 'w') as json_file:
+                json.dump(data, json_file)
+                process = subprocess.Popen(["streamlit", "run", os.path.join('streamlit_app.py')]) 
+            return '<h1> Chargement du dashboard ...</h1>'
+        else:
+            return 'Nope'
+    except requests.exceptions.RequestException as e:
+        return str(e)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
 
 

@@ -1,0 +1,7 @@
+/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Your+Chosen+Font&display=swap"> */
+@font-face {
+    font-family: 'Archivo Black';
+    src: url('/Users/JoycyRobert/Documents/JUPYTER/OPC/PROJET_7/P7/creditworthiness-scoring/Archivo_Black.ttf') format('truetype'); /* Corrected format */
+    font-weight: normal;
+    font-style: normal;
+}

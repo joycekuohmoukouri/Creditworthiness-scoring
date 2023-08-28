@@ -20,6 +20,13 @@ def application(chemin, selected_features):
   df['DAYS_EMPLOYED'] = df['DAYS_EMPLOYED'].astype(int)
   # RATIO D'ENDETTEMENT
   df['RATIO_ENDETT(%)'] = round((df['AMT_ANNUITY'] / df['AMT_INCOME_TOTAL'])*100,1)
+  # OCCUPATION
+  occupation_mapping = {
+    'Commercial associate': 'Working',
+    'Businessman': 'Working',
+    'Maternity leave': 'Working',
+    'Student': 'Working'}
+  df['NAME_INCOME_TYPE'] = df['NAME_INCOME_TYPE'].map(occupation_mapping)
   # SECTEUR
   organization_categories = {
     'Business Entity Type 3': 'Business Entity',
@@ -340,6 +347,8 @@ def merge_(df, credit_card, POS, install, bureau):
   df = df.merge(POS, how = 'left', on = 'SK_ID_CURR')
   df = df.merge(install, how = 'left', on = 'SK_ID_CURR')
   df = df.merge(bureau, how = 'left', on = 'SK_ID_CURR')
+  ## RATIO entre le montant du crédit demandé et l'income annuel 
+  df['RATIO_CREDIT_REVENU'] = round((df['MONTANT_CREDIT']/df['REVENUS_TOT']),2)
   ## RATIO CARTE DE CREDIT
   df['CC_RATIO_CREDIT'] = round((df['CC_SOLDE_MOYEN_MENSUEL']/df['CC_LIMITE_CREDIT_MOYENNE'])*100,2)
   df['CC_RATIO_CREDIT'] = df['CC_RATIO_CREDIT'].fillna(0)
@@ -407,15 +416,20 @@ def preprocess_model():
 
 # Fonction pour obtenir les données clients
 def get_client_data(client_id):
-    selected_features = ['PROPRIETAIRE', 'NBRE_ENFANT',
-       'ANCIENNETE_CREDIT', 'CHARGES_ANNUEL', 'REVENUS_TOT', 'MONTANT_CREDIT',
-       'OCCUPATION', 'CC_RATIO_CREDIT', 'NIVEAU_ETUDE', 'AGE',
-       'ANCIENNETE_EMPLOI', 'SCORE_REGION', 'HEURE_APP', 'SECTEUR_ACTIVITE',
-       'SCORE_2_EXT', 'RATIO_ENDETT(%)', 'NBRE_CONTRAT_ACTIFS',
-       'NBRE_J_RETARD', 'POS_PROGRESS_MAX_MIN', 'CC_NOMBRE_RETRAIT_MOYEN',
-       'CB_SOMME_DUES_RETARD']
-    df = pd.read_csv('client_db.csv',dtype={'SK_ID_CURR' : 'object'}, usecols= selected_features)
-    client_data = df[df['client_id'] == client_id]
+    selected_features = [#'GENRE',
+                     'PROPRIETAIRE', 'NBRE_ENFANT',
+                     'ANCIENNETE_CREDIT', 'CHARGES_ANNUEL', 'REVENUS_TOT',
+                     #'MONTANT_CREDIT',
+                    'RATIO_CREDIT_REVENU',
+                     'OCCUPATION', 'CC_RATIO_CREDIT', 'NIVEAU_ETUDE', 'AGE',
+                     'ANCIENNETE_EMPLOI', 'SCORE_REGION', 'HEURE_APP', 'SECTEUR_ACTIVITE',
+                     'SCORE_2_EXT',
+                     #'RATIO_ENDETT(%)',
+                     'NBRE_CONTRAT_ACTIFS','NBRE_J_RETARD', 'POS_PROGRESS_MAX_MIN',
+                     'CC_NOMBRE_RETRAIT_MOYEN', 'CB_SOMME_DUES_RETARD']
+    df = pd.read_csv('client_db.csv',dtype={'SK_ID_CURR' : 'object'})
+    client_data = df[df['SK_ID_CURR'] == client_id]
+    client_data = client_data[selected_features]
     return client_data
 
 
