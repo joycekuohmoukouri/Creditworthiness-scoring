@@ -5,6 +5,7 @@ import MyModule_p7
 import requests
 import shap  # Import the 'shap' module
 from flask import Flask, request, jsonify
+import os
 
 ### les fonctions 
 df_train_org = pd.read_csv('./df_train_set_1.csv',
@@ -31,7 +32,7 @@ def feat_local(df_client_pp):
   df_client_pp.columns = new_column_names
   return shap_values, df_client_pp
 
-api_root = 'https://app-jkm-demo-projet7-4712b713aabd.herokuapp.com'
+api_root = 'https://connect-dublin.heroku.com/api/v3'
 app_prediction = Flask(__name__, static_url_path='/static')
 app_prediction.config["DEBUG"] = True
 

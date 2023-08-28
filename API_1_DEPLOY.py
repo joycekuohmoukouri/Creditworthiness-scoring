@@ -14,7 +14,7 @@ import json
 app = Flask(__name__, static_url_path='/static')
 app.config["DEBUG"] = True
 
-api_root = 'https://app-jkm-demo-projet7-4712b713aabd.herokuapp.com'
+api_root = 'https://connect-dublin.heroku.com/api/v3'
 
 @app.route(api_root)
 def welcome():
