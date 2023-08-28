@@ -31,7 +31,7 @@ def Dashboard():
             data = response.json()
             with open('shared_score.json', 'w') as json_file:
                 json.dump(data, json_file)
-                process = subprocess.Popen(["streamlit", "run", os.path.join('streamlit_app.py')]) 
+                process = subprocess.Popen(["streamlit", "run", os.path.join('../streamlit_app.py')]) 
             return '<h1> Chargement du dashboard ...</h1>'
         else:
             return 'Nope'
