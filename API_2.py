@@ -9,7 +9,6 @@ from flask import Flask, request, jsonify
 ### les fonctions 
 df_train_org = pd.read_csv('./df_train_set_1.csv',
                  usecols=['SECTEUR_ACTIVITE'])
-print(df_train_org.head())
 
 freq_by_org_type = df_train_org['SECTEUR_ACTIVITE'].value_counts(normalize=True).to_dict()
 
@@ -35,7 +34,7 @@ def feat_local(df_client_pp):
 app_prediction = Flask(__name__, static_url_path='/static')
 app_prediction.config["DEBUG"] = True
 
-@app_prediction.route('/predict/', methods=['GET', 'POST'])
+@app_prediction.route('/', methods=['GET', 'POST'])
 def prediction_credit():
     data_recu = request.get_json()
     client_id = data_recu.get('client_id') 

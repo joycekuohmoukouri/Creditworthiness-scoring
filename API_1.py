@@ -23,7 +23,7 @@ def welcome():
 def Dashboard():
     # Receive client ID from the form submission
     client_id = request.form.get('client_id')
-    api_url = 'http://127.0.0.1:7000/predict/'
+    api_url = 'http://127.0.0.1:7000/'
 
     try:
         response = requests.post(api_url, json={'client_id': client_id})
