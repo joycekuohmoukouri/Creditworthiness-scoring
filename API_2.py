@@ -67,5 +67,6 @@ def prediction_credit():
     }
  
 if __name__ == '__main__':
-    app_prediction.run(host='0.0.0.0', port=7000)
+    #app_prediction.run(host='0.0.0.0', port=7000)
+    app_prediction.run(threaded=True, port=7001)
 
