@@ -1,2 +1,3 @@
 web: gunicorn API_1:app
+streamlit : streamlit run streamlit_app
 
