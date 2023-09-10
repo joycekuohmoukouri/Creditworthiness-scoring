@@ -23,7 +23,7 @@ def welcome():
 def Dashboard():
     # Receive client ID from the form submission
     client_id = request.form.get('client_id')
-    api_url = 'https://pacific-badlands-33124-c377cfc7c668.herokuapp.com/'
+    api_url = 'http://127.0.0.1:7000/predict/'
 
     try:
         response = requests.post(api_url, json={'client_id': client_id})
@@ -34,7 +34,7 @@ def Dashboard():
                 process = subprocess.Popen(["streamlit", "run", os.path.join('streamlit_app.py')]) 
             return '<h1> Chargement du dashboard ...</h1>'
         else:
-            return 'Nope'
+            return 'Erreur ou ID client introuvable'
     except requests.exceptions.RequestException as e:
         return str(e)
 

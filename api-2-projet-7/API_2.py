@@ -26,10 +26,27 @@ def prediction_credit():
         # Transformation
         loaded_preprocess = MyModule_p7.preprocess_model()
         df_client_pp = loaded_preprocess.transform(client_data)
+        classification_model = joblib.load('LightGBM_bestmodel.pkl')
+        #Prédiction
+        prediction = classification_model.predict(df_client_pp)
+        proba = classification_model.predict_proba(df_client_pp)
+        score = int(round((proba[0][0])*100)) #probabilité complémentaire
+        # Feature analysis using SHAP values
+        SV, df_client_pp = MyModule_p7.feat_local(df_client_pp)
+        # Dataframe sv_df
+        sv_df = pd.DataFrame(columns=['Class_0', 'Class_1'], index=df_client_pp.columns)
+        sv_df['Class_0'] = SV[0].T
+        sv_df['Class_1'] = SV[1].T
+        sv_df = sv_df.reset_index()
+        sv_df = sv_df.to_dict()
+
         df_client_pp = df_client_pp.to_dict()
 
         return jsonify({'client_id': client_id,
-                'client_data' : df_client_pp})
+        'score': score,
+        'feat_imp' :sv_df,
+        'client_data' : df_client_pp
+    })
             
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Default to port 5000 if not specified

@@ -1,10 +1,11 @@
 
 # Module créer dans le cadre du projet 7 de la formation OpenClassroom. Ce module rassemble les fonctions qui permettent de préparer le dataset avant l'utilisation du modèle
-
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
 import joblib
+import shap 
+
 
 def application(chemin, selected_features):
   df = pd.read_csv(chemin,
@@ -402,17 +403,16 @@ def nettoyage(df):
   return df
 
 ###----------------------------- Fonctions pour l'API---------------------------------------
+
+
 # Fonction permettant de charger le preprocessing
 def preprocess_model():
-  df_train_org = pd.read_csv('df_train_set_1.csv',
-                 usecols=['SECTEUR_ACTIVITE'])
-  freq_by_org_type = df_train_org['SECTEUR_ACTIVITE'].value_counts(normalize=True).to_dict()
-# Define the function for Frequency Encoding
-  def frequency_encode(x):
-    return x.replace(freq_by_org_type)
-  with open('preprocessing_2.pkl', 'rb') as f:
-    loaded_preprocess = joblib.load(f)
-  return loaded_preprocess
+    from projet7package.frequency_encode import frequency_encode
+    from sklearn.preprocessing import FunctionTransformer
+    freq_encoder = FunctionTransformer(frequency_encode)
+    with open('preprocessing_2.pkl', 'rb') as f:
+        loaded_preprocess = joblib.load(f)
+    return loaded_preprocess
 
 # Fonction pour obtenir les données clients
 def get_client_data(client_id):
@@ -431,5 +431,17 @@ def get_client_data(client_id):
     client_data = df[df['SK_ID_CURR'] == client_id]
     client_data = client_data[selected_features]
     return client_data
+
+def feat_local(df_client_pp):
+        classification_model = joblib.load('LightGBM_bestmodel.pkl')
+        # J'instancie le Shap explainer -----------------------------------
+        explainer = shap.TreeExplainer(classification_model)
+        # Calculate SHAP values for the client's prediction
+        shap_values = explainer.shap_values(df_client_pp)
+        ##-------- df_pp
+        prefixes_to_remove = ['oneHot__', 'remainder__', 'frequency__']
+        new_column_names = [col.replace(prefix, '') for col in df_client_pp.columns for prefix in prefixes_to_remove if col.startswith(prefix)]
+        df_client_pp.columns = new_column_names
+        return shap_values, df_client_pp
 
 
