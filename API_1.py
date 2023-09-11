@@ -32,7 +32,7 @@ def Dashboard():
       # Store the data in the global variable
     global dashboard_data
     dashboard_data = data
-    return '<h1> Chargement du dashboard </h1> '
+    return redirect("https://dashboard-projet-7-jkm-bcf05f5e28fb.herokuapp.com")
 
 
 @app.route('/Dashboard_st/',methods=['GET',])
