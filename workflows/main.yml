@@ -23,6 +23,6 @@ jobs:
         pip install -r requirements.txt 
 
       - name: Run pytest tests
-      run: pytest /api-1-projet-7/test_API_1.py
+      run: pytest test_API_1.py
 
 
