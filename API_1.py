@@ -49,13 +49,14 @@ def Dashboard():
         sv_df['Class_1'] = SV[1].T
         sv_df = sv_df.reset_index()
         sv_df = sv_df.to_dict()
-
-              # Store the data in the global variable
-    #global dashboard_data
-    #dashboard_data = data
-
         df_client_pp = df_client_pp.to_dict()
+        global dashboard_data
+        dashboard_data = {'client_id': client_id,
+        'score': score,
+        'feat_imp' :sv_df,
+        'client_data' : df_client_pp}
 
+        
         return jsonify({'client_id': client_id,
         'score': score,
         'feat_imp' :sv_df,
@@ -65,8 +66,7 @@ def Dashboard():
 
 
 
-
-@app.route('/Dashboard_st/',methods=['GET',])
+@app.route('/Dashboard_st/',methods=['GET'])
 def another_endpoint():
     global dashboard_data
     if not dashboard_data:
