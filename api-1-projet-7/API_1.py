@@ -32,9 +32,10 @@ def Dashboard():
       # Store the data in the global variable
     global dashboard_data
     dashboard_data = data
+    subprocess.Popen(["streamlit", "run", "https://dashboard-projet-7-jkm-bcf05f5e28fb.herokuapp.com"])
     return '<h1> Chargement du dashboard </h1> '
 
-# Define a route for the welcome page
+
 @app.route('/Dashboard_st/',methods=['GET',])
 def another_endpoint():
     global dashboard_data
