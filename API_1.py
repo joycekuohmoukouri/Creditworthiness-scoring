@@ -59,8 +59,9 @@ def Dashboard():
         return jsonify({'client_id': client_id,
         'score': score,
         'feat_imp' :sv_df,
-        'client_data' : df_client_pp
-    })
+        'client_data' : df_client_pp})
+    else:
+        return 'Nope'
 
 
 
