@@ -77,6 +77,7 @@ sv_df_class0 = sv_df.sort_values('Class_0', ascending=False)
 sv_df_class1 = sv_df.sort_values('Class_1', ascending=False)
 ls_features_0 = sv_df_class0[:4]['index'].tolist()
 ls_features_1 = sv_df_class1[:4]['index'].tolist()
+print(ls_features_0, ls_features_1)
 print(sv_df.head())
 
 if score >= 60:

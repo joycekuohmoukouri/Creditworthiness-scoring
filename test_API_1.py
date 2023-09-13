@@ -13,7 +13,7 @@ def test_welcome_route(client):
     assert response.status_code == 200  # Je teste si j'obtiens un code 200
 
 @patch('API_1.requests.post')
-def test_dashboard_route_api_request(mock_post, client):
+def test_dashboard_route_api_request(client):
     # Je teste l'API avec le client suivant : 
     client_id = '100066'
     input_data = {'client_id': client_id}
