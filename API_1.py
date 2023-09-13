@@ -55,8 +55,6 @@ def Dashboard():
         'score': score,
         'feat_imp' :sv_df,
         'client_data' : df_client_pp}
-
-        subprocess.Popen(["streamlit", "run", "streamlit_app.py"])
         
         return jsonify({'client_id': client_id,
         'score': score,
